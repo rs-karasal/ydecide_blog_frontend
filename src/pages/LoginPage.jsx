@@ -1,14 +1,16 @@
 import { Form, Input, Button, message } from "antd";
 import axiosInstance from "../axiosInstance";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await axiosInstance.post("/login", {
+      const response = await axiosInstance.post("api/auth/login", {
         username: values.username,
         Password: values.password,
       });
@@ -17,6 +19,8 @@ const LoginPage = () => {
         localStorage.setItem("token", response.data.token);
         message.success("Login successful!");
       }
+      navigate("/");
+      // eslint-disable-next-line no-unused-vars
     } catch (error) {
       message.error("Login failed. Please check your credentials.");
     } finally {
